@@ -72,11 +72,11 @@ export async function validarAdm(adm){
     id_adm id,
     nm_adm nome
     from tb_adm 
-    where (nm_usuario = ? or ds_email = ?)
+    where nm_adm = ? 
           and ds_senha = ?
     
     `
 
-    let registros = await con.query(comando, [adm.nome, adm.email, adm.senha,])
+    let registros = await con.query(comando, [adm.nome, adm.senha,])
     return registros[0][0]
 }

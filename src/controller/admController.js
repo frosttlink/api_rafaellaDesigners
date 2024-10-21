@@ -4,6 +4,7 @@ import alteraAdmService from "../service/adm/admAlterarService.js";
 import deletarAdmService from "../service/adm/admDeleteService.js";
 import consultarAdmService from "../service/adm/admConsultaService.js";
 import validarAdmService from "../service/adm/admEntrarService.js";
+import { gerarToken } from "../utils/jwt.js";
 
 
 const endpoint = Router();
@@ -72,16 +73,16 @@ endpoint.post('/entrar', async (req, resp) => {
 
         let admVerificacao = await validarAdmService(adm)
 
-        if (adm == null) {
+        if (admVerificacao == null) {
             resp.send({ erro: "Usuário ou senha incorreto(s)" })
         } else {
-            let token = gerarToken(usuario);
+            let token = gerarToken(admVerificacao);
             resp.send({
                 "token": token
             })
         }
     
-    } catch (error) {
+    } catch (err) {
         resp.status(400).send({
             erro: err.message
         })
