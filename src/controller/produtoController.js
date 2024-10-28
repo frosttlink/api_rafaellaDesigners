@@ -9,6 +9,7 @@ import multer from "multer";
 import { Router } from "express";
 
 
+
 const endpoints = Router();
 
 endpoints.get('/produto', async (req,resp) =>{
@@ -49,6 +50,7 @@ endpoints.post('/produto', async (req,resp) =>{
         })
     }
 })
+
 
 endpoints.put('/produto/:id', async (req,resp) =>{
     try {

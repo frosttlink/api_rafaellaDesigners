@@ -4,6 +4,7 @@ import clienteController from './controller/clienteController.js';
 import admController from './controller/admController.js';
 import estoqueControler from './controller/estoqueController.js';
 import produtoController from './controller/produtoController.js'
+import produtoAndEstoqueController from './controller/produtoAndEstoqueController.js'
 
 
 export default function rotas (servidor){
@@ -13,6 +14,7 @@ export default function rotas (servidor){
     servidor.use(agendamentoController);
     servidor.use(estoqueControler);
     servidor.use(produtoController);
+    servidor.use(produtoAndEstoqueController);
 }
 
 

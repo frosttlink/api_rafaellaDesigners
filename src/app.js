@@ -7,6 +7,7 @@ import rotas from "./rotas.js";
 
 const servidor = express()
 
+servidor.use(express.json({ limit: '10mb' }));
 servidor.use(cors());
 servidor.use(express.json());
 
