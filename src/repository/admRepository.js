@@ -1,22 +1,24 @@
 import con from "./connection.js";
+import crypto from "crypto-js";
 
-export async function addAdm(adm){
+export async function addAdm(adm) {
     let comando = `
-    insert into tb_adm(nm_adm, ds_email,ds_senha,)
+    insert into tb_adm(nm_adm,ds_email,ds_senha)
     values (?,?,?)
     `;
-    let resposta = await con.query (comando, [
+    let hash = crypto.SHA256(adm.senha).toString();
+    let resposta = await con.query(comando, [
         adm.nome,
         adm.email,
-        adm.senha
+        hash
     ]);
     let info = resposta[0];
     let idAdm = info.insertId;
-
+    console.log(hash);
     return idAdm
 }
 
-export async function alterarAdm(id,adm){
+export async function alterarAdm(id, adm) {
     let comando = `
     update tb_adm
     set nm_adm = ? 
@@ -24,10 +26,12 @@ export async function alterarAdm(id,adm){
         ds_senha = ?
     where id_adm = ?
     `;
-    let resposta = await con.query (comando, [
+
+    let hash = crypto.SHA256(adm.senha).toString();
+    let resposta = await con.query(comando, [
         adm.nome,
         adm.email,
-        adm.senha,
+        hash,
         id
     ]);
 
@@ -37,22 +41,23 @@ export async function alterarAdm(id,adm){
     return linhas
 }
 
-export async function deletarAdm(id){
+export async function deletarAdm(id) {
 
     let comando = `
     delete from tb_adm where id_adm = ?
     `;
-        let resposta = await con.query (comando, [ 
+
+    let resposta = await con.query(comando, [
         id
     ]);
-    
+
     let info = resposta[0];
     let linhas = info.affectedRows;
 
     return linhas;
 }
 
-export async function consultarAdm(){
+export async function consultarAdm() {
 
     let comando = `
     select ds_email,
@@ -66,17 +71,17 @@ export async function consultarAdm(){
 }
 
 
-export async function validarAdm(adm){
+export async function validarAdm(adm) {
     let comando = `
     select 
     id_adm id,
     nm_adm nome
     from tb_adm 
     where nm_adm = ? 
-          and ds_senha = ?
+        and ds_senha = ?
     
     `
-
-    let registros = await con.query(comando, [adm.nome, adm.senha,])
+    let hash = crypto.SHA256(adm.senha).toString();
+    let registros = await con.query(comando, [adm.nome, hash])
     return registros[0][0]
 }
