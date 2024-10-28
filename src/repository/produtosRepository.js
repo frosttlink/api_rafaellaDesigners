@@ -2,12 +2,12 @@ import con from "./connection.js";
 
 export async function adicionarProduto(produto){
     const comando = `
-        insert into tb_produtos(nm,produto,tp_produto,ds_produto,qtd_produto,id_produto, img_produto)
+        insert into tb_produtos(nm,produto,tp_produto,qtd_produto,id_produto, img_produto)
         values
         (?,?,?,?,?,?)
         ;
     `
-    let resposta = await con.query(comando,[produto.nm_produto, produto.tp_produto, produto.descricao, produto.quantidade,produto.valor, produto.img_produto]);
+    let resposta = await con.query(comando,[produto.nm_produto, produto.tp_produto, produto.quantidade,produto.valor, produto.img_produto]);
 
     let info = resposta[0];
     return info.insertId;
@@ -18,7 +18,6 @@ export async function consultarProduto(){
     select id_produto	id,
     nm_produto          nome,
     tp_produto          tipo,
-    ds_produto			descricao,
     vl_produto			valor,
     qtd_produto			quantidade,
     img_produto			imagem
@@ -35,7 +34,6 @@ export async function consultarIDProduto(id){
     select id_produto	id,
     nm_produto          nome,
     tp_produto          tipo,
-    ds_produto			descricao,
     vl_produto			valor,
     qtd_produto			quantidade,
     img_produto			imagem
@@ -51,15 +49,14 @@ export async function consultarIDProduto(id){
 export async function alterarProduto(produto,id){
     const comando = `
     update tb_produtos 
-     nm_produto          nome,
+    nm_produto          nome,
     tp_produto          tipo,
-    ds_produto			descricao,
     vl_produto			valor,
     qtd_produto			quantidade,
     img_produto			imagem
     where id_produto
     `
-    let resposta = await con.query(comando,[produto.nm_produto, produto.tp_produto, produto.descricao, produto.quantidade,produto.valor, produto.img_produto]);
+    let resposta = await con.query(comando,[produto.nm_produto, produto.tp_produto, produto.quantidade,produto.valor, produto.img_produto]);
 
     let info = resposta[0];
 

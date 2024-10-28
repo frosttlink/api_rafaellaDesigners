@@ -3,7 +3,7 @@ import con from "./connection.js";
 
 export async function adicionarAgendamento(agendamento) {
   const comando = `
-    insert into tb_agendamentos (id_cliente, dt_agendamento, hr_agendamento, id_servico, atendimento_domicilio)
+    insert into tb_agendamentos (id_cliente, dt_agendamento, hr_agendamento, nm_servico, atendimento_domicilio)
     values (?, ?, ?, ?, ?);
   `;
 
@@ -28,7 +28,7 @@ export async function alterarAgendamento(id, agendamento) {
       set id_cliente = ?, 
         dt_agendamento = ? , 
         hr_agendamento = ?,
-        id_servico =?,
+        nm_servico =?,
         atendimento_domicilio
     where id_agendamento = ?;
   `;
@@ -38,6 +38,7 @@ export async function alterarAgendamento(id, agendamento) {
       agendamento.cliente,
       agendamento.data,
       agendamento.hora,
+      agendamento.servico,
       agendamento.atendimento_domicilio,
       id
   ]);
@@ -68,7 +69,7 @@ export async function consultarAgendamento(){
     id_cliente        conteudo,
     dt_agendamento            datas,
     hr_agendamento       hora,
-    id_servico        servico,
+    nm_servico        servico,
     atendimento_domicilio atend,
     from tb_agendamento;
     `
