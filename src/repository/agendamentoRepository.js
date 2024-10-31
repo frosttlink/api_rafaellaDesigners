@@ -3,8 +3,8 @@ import con from "./connection.js";
 
 export async function adicionarAgendamento(agendamento) {
   const comando = `
-    insert into tb_agendamentos (id_cliente, dt_agendamento, hr_agendamento, nm_servico, atendimento_domicilio)
-    values (?, ?, ?, ?, ?);
+    insert into tb_agendamento (nm_cliente, dt_agendamento, ds_horario, nm_servico, atendimento_domicilio,ds_cep)
+    values (?, ?, ?, ?, ?,?);
   `;
 
   let registro = await 
@@ -13,7 +13,8 @@ export async function adicionarAgendamento(agendamento) {
       agendamento.data,
       agendamento.hora,
       agendamento.servico,
-      agendamento.atendimento_domicilio
+      agendamento.atendimento_domicilio,
+      agendamento.cep
   ]);
 
   let info = registro[0];
@@ -25,11 +26,12 @@ export async function adicionarAgendamento(agendamento) {
 export async function alterarAgendamento(id, agendamento) {
   const comando = `
     update tb_agendamento
-      set id_cliente = ?, 
+      set nm_cliente = ?, 
         dt_agendamento = ? , 
-        hr_agendamento = ?,
+        ds_horario = ?,
         nm_servico =?,
-        atendimento_domicilio
+        atendimento_domicilio = ?,
+        ds_cep = ?
     where id_agendamento = ?;
   `;
 
@@ -40,6 +42,7 @@ export async function alterarAgendamento(id, agendamento) {
       agendamento.hora,
       agendamento.servico,
       agendamento.atendimento_domicilio,
+      agendamento.cep,
       id
   ]);
 
@@ -51,14 +54,14 @@ export async function alterarAgendamento(id, agendamento) {
 export async function deletarAgendamento(id) {
   const comando = `
     delete 
-    from tb_agendamentos
-    where id_agendamentos  = ?;
+    from tb_agendamento
+    where id_agendamento  = ?;
   `;
 
-  let resposta = con.query(comando, [id])
+  let resposta = await con.query(comando, [id])
   
-  let info = resposta[0]
-  let linhas = info.affectedRows
+  let info = resposta[0];
+  let linhas = info.affectedRows;
 
   return linhas;
 }
@@ -66,18 +69,17 @@ export async function deletarAgendamento(id) {
 export async function consultarAgendamento(){
     const comando = `
     select id_agendamento     id,
-    id_cliente        conteudo,
-    dt_agendamento            datas,
-    hr_agendamento       hora,
+    nm_cliente        conteudo,
+    dt_agendamento    datas,
+    ds_horario    hora,
     nm_servico        servico,
     atendimento_domicilio atend,
+    ds_cep      endereco
     from tb_agendamento;
-    `
-
-    let resposta = con.query(comando, [id])
+    `;
+  let resposta = await con.query(comando)
   
-  let info = resposta[0]
-  let linhas = info.affectedRows
+  let registros = resposta[0]
 
-  return linhas
+  return registros
 }
