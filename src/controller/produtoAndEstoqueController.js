@@ -1,11 +1,8 @@
 import { inserirProdutoAndEstoqueservice } from "../service/produtoAndEstoque/adicionarProdutoAndEstoque.js";
 import { Router } from "express";
 import { alterarProdutoAndEstoqueService } from "../service/produtoAndEstoque/alterarProdutoAndEstoque.js";
-<<<<<<< HEAD
 import { deletarProdutoAndEstoqueService } from "../service/produtoAndEstoque/deletarProdutoAndEstoque.js";
-=======
-import { removerPEservice } from "../service/produtoAndEstoque/deletarProdutoAndEstoque.js";
->>>>>>> c1183e938974763a7263fc16f887a9505d0e8390
+
 
 const endpoints = Router();
 
