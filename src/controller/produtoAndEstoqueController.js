@@ -1,6 +1,7 @@
 import { inserirProdutoAndEstoqueservice } from "../service/produtoAndEstoque/adicionarProdutoAndEstoque.js";
 import { Router } from "express";
 import { alterarProdutoAndEstoqueService } from "../service/produtoAndEstoque/alterarProdutoAndEstoque.js";
+import { deletarProdutoAndEstoqueService } from "../service/produtoAndEstoque/deletarProdutoAndEstoque.js";
 
 const endpoints = Router();
 
@@ -39,5 +40,25 @@ endpoints.put('/produto/estoque/:id', async (req,resp) =>{
         })
     }
 })
+
+
+endpoints.delete('/produto/estoque/:id', async (req, resp) => {
+    try {
+      let id = req.params.id
+  
+      const linhasAfetadasDeletar = await deletarProdutoAndEstoqueService(id)
+  
+      if (linhasAfetadasDeletar.linhasAfetadas > 0 || linhasAfetadasDeletar.linhasAfetadas2 > 0) {
+        resp.send('Produto e estoque deletados com sucesso.');
+    } else {
+        resp.status(404).send('Nenhum produto ou estoque encontrado para o ID fornecido.');
+    }
+  
+    } catch (err) {
+      resp.status(400).send({
+        erro: err.message
+      })
+    }
+  })  
 
 export default endpoints

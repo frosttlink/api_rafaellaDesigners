@@ -53,3 +53,25 @@ export async function alterarProdutoAndEstoque(produto, id) {
        produtoAtualizado 
     }
 }
+
+        export async function removerProdutoAndEstoque(id){
+            const comando = `
+            delete from tb_estoque
+            where id_estoque = ?;
+            `
+            const comando2 = `
+            delete from tb_produto
+            where id_produto = ?;
+            `
+
+            let resposta = await con.query(comando,[id]);
+            let resposta2 = await con.query(comando2,[id]);
+
+
+            let linhasAfetadas = resposta[0][0].affectedRows
+            let linhasAfetadas2 = resposta2[0][0].affectedRows
+
+            return {linhasAfetadas,
+                    linhasAfetadas2
+            }
+            }   
