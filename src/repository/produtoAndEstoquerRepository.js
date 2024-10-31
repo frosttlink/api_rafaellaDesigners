@@ -54,7 +54,7 @@ export async function alterarProdutoAndEstoque(produto, id) {
     }
 }
 
-        export async function removerProdutoAndEstoque(id){
+export async function removerProdutoAndEstoque(id){
             const comando = `
             delete from tb_estoque
             where id_estoque = ?;
@@ -74,4 +74,4 @@ export async function alterarProdutoAndEstoque(produto, id) {
             return {linhasAfetadas,
                     linhasAfetadas2
             }
-            }   
+          }   

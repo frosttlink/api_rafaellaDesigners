@@ -62,3 +62,4 @@ endpoints.delete('/produto/estoque/:id', async (req, resp) => {
   })  
 
 export default endpoints
+  
