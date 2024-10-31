@@ -14,7 +14,6 @@ export async function addAdm(adm) {
     ]);
     let info = resposta[0];
     let idAdm = info.insertId;
-    console.log(hash);
     return idAdm
 }
 
