@@ -22,9 +22,8 @@ export async function consultarProduto() {
     nm_produto          nome,
     tp_produto          tipo,
     vl_produto			valor,
-    qtd_produto			quantidade,
     img_produto			imagem
-    from tb_produtos;
+    from tb_produto;
     `
     let resposta = await con.query(comando);
     let registros = resposta[0];
@@ -40,7 +39,7 @@ export async function consultarIDProduto(id) {
     vl_produto			valor,
     qtd_produto			quantidade,
     img_produto			imagem
-    from tb_produtos
+    from tb_produto
     where id_produto = ?
     `
     let resposta = await con.query(comando, [id]);
@@ -67,7 +66,7 @@ export async function alterarProduto(produto, id) {
 
 export async function removerProduto(id) {
     const comando = `
-    delete from tb_produtos
+    delete from tb_produto
     where id_produto = ?;
     `
 
@@ -79,7 +78,7 @@ export async function removerProduto(id) {
 
 export async function alterarImagemProduto(id, caminho) {
     const comando = ` 
-      update tb_produtos 
+      update tb_produto
         set img_produto = ?
       where id_produto = ?;
     `;

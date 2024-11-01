@@ -75,5 +75,23 @@ export async function removerProdutoAndEstoque(id){
             return {linhasAfetadas,
                     linhasAfetadas2
             }
-          }   
+    }   
 
+    export async function consultarEP(){
+        let comando = `
+        SELECT 
+            e.qtd_produto,
+            p.nm_produto,
+            p.tp_produto,
+            p.vl_produto,
+            p.img_produto
+        FROM 
+            tb_estoque e
+        INNER JOIN 
+            tb_produto p ON e.id_produto = p.id_produto;
+        `
+        let resposta = await con.query(comando);
+        let registros = resposta[0];
+    
+        return registros;
+    }
