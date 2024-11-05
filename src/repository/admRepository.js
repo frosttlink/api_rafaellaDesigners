@@ -3,7 +3,7 @@ import crypto from "crypto-js";
 
 export async function addAdm(adm) {
     let comando = `
-    insert into tb_adm(nm_adm,ds_email,ds_senha)
+    insert into tb_adm(nm_adm, ds_email, ds_senha)
     values (?,?,?)
     `;
     let hash = crypto.SHA256(adm.senha).toString();
