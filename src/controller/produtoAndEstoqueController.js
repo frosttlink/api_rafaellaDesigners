@@ -1,10 +1,27 @@
 import { inserirProdutoAndEstoqueservice } from "../service/produtoAndEstoque/adicionarProdutoAndEstoque.js";
 import { Router } from "express";
 import { alterarProdutoAndEstoqueService } from "../service/produtoAndEstoque/alterarProdutoAndEstoque.js";
+import { deletarProdutoAndEstoqueService } from "../service/produtoAndEstoque/deletarProdutoAndEstoque.js";
+import { consultarEPService } from "../service/produtoAndEstoque/consultarProdutoEstoque.js";
+import { autenticar } from "../utils/jwt.js";
+
 
 const endpoints = Router();
 
-endpoints.post('/produto/estoque', async (req,resp) =>{
+endpoints.get('/procurar/inner/',autenticar, async (req,resp) =>{
+    try {
+        let registros = await consultarEPService();
+        
+        resp.send(registros);
+        //resp.send(registros.map(item => { return {...item, imagem: item.img_produto.toString()}}));
+    } catch (err) {
+        resp.status(400).send({
+            err : err.message
+        })
+    }
+})
+
+endpoints.post('/adicionar/pee', async (req,resp) =>{
     try {
         let produto = req.body;
         
@@ -21,7 +38,7 @@ endpoints.post('/produto/estoque', async (req,resp) =>{
 })
 
 
-endpoints.put('/produto/estoque/:id', async (req,resp) =>{
+endpoints.put('/alterar/pee/:id', async (req,resp) =>{
     try {
         let id = req.params.id;
         let produto = req.body;
@@ -40,4 +57,29 @@ endpoints.put('/produto/estoque/:id', async (req,resp) =>{
     }
 })
 
+
+
+endpoints.delete('/deletar/pee/:id', async (req, resp) => {
+    try {
+      let id = req.params.id
+  
+      const linhasAfetadasDeletar = await deletarProdutoAndEstoqueService(id)
+  
+      if (linhasAfetadasDeletar.linhasAfetadas > 0 || linhasAfetadasDeletar.linhasAfetadas2 > 0) {
+        resp.send('Produto e estoque deletados com sucesso.');
+    } else {
+        resp.status(404).send('Nenhum produto ou estoque encontrado para o ID fornecido.');
+    }
+  
+    } catch (err) {
+      resp.status(400).send({
+        erro: err.message
+      })
+    }
+  })  
+
+
+
 export default endpoints
+  
+
