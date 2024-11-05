@@ -4,3 +4,5 @@ export default async function deletarClienteService(id){
     if(linhasAfetadas == 0)
         throw new Error("nao deletou mano")
 }
+
+

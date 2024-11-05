@@ -1,8 +1,8 @@
 import { Router} from "express";
 import clienteAddService from "../service/cliente/clienteAddService.js";
-import alteraClienteService from "../service/cliente/clienteAlterarService.js";
-import deletarClienteService from "../service/cliente/clienteDeleteService.js";
-import consultarClienteService from "../service/cliente/clienteConsultaService.js";
+import alteraClienteService from "../service/cliente/alterarClienteService.js";
+import deletarClienteService from "../service/cliente/deletarClienteService.js";
+import consultarClienteService from "../service/cliente/consultarClienteService.js";
 import { autenticar } from "../utils/jwt.js";
 const endpoint = Router();
 endpoint.post("/cliente", async (req,resp) =>{
