@@ -22,6 +22,6 @@ let con = await mysql.createConnection({
 
 });
 
-console.log('api braba foi feita');
+console.log('API CONECTADA COM DB');
 
 export default con;
