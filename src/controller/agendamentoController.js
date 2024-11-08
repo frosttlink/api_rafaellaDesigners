@@ -7,7 +7,7 @@ import consultarAgendamentoService from "../service/agendamentos/consultarAgenda
 
 const endpoints = Router()
 
-endpoints.get('/agendamento/consultar/', async (req, resp) => {
+endpoints.get('/agendamento', async (req, resp) => {
     try{
         let registro= await consultarAgendamentoService();
         resp.send(registro);

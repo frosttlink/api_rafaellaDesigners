@@ -1,20 +1,16 @@
 import con from "./connection.js";
 
-
 export async function adicionarAgendamento(agendamento) {
   const comando = `
-    insert into tb_agendamento (nm_cliente, dt_agendamento, ds_horario, nm_servico, atendimento_domicilio,ds_cep)
-    values (?, ?, ?, ?, ?,?);
+    insert into tb_agendamento (dt_agendamento, bl_domicilio, nm_servico, id_cliente)
+    values (?, ?, ?, ?);
   `;
 
-  let registro = await 
-    con.query(comando, [
-      agendamento.cliente,
-      agendamento.data,
-      agendamento.hora,
-      agendamento.servico,
-      agendamento.atendimento_domicilio,
-      agendamento.cep
+  let registro = await con.query(comando, [
+    agendamento.data,
+    agendamento.domicilio,
+    agendamento.servico,
+    agendamento.idCliente,
   ]);
 
   let info = registro[0];
@@ -26,24 +22,19 @@ export async function adicionarAgendamento(agendamento) {
 export async function alterarAgendamento(id, agendamento) {
   const comando = `
     update tb_agendamento
-      set nm_cliente = ?, 
-        dt_agendamento = ? , 
-        ds_horario = ?,
-        nm_servico =?,
-        atendimento_domicilio = ?,
-        ds_cep = ?
+      set dt_agendamento = ?,
+       bl_domicilio = ?, 
+       nm_servico = ?, 
+       id_cliente = ?
     where id_agendamento = ?;
   `;
 
-  let resposta = await 
-    con.query(comando, [
-      agendamento.cliente,
-      agendamento.data,
-      agendamento.hora,
-      agendamento.servico,
-      agendamento.atendimento_domicilio,
-      agendamento.cep,
-      id
+  let resposta = await con.query(comando, [
+    agendamento.data,
+    agendamento.domicilio,
+    agendamento.servico,
+    agendamento.idCliente,
+    id,
   ]);
 
   let linhasAfetadas = resposta[0].affectedRows;
@@ -58,28 +49,26 @@ export async function deletarAgendamento(id) {
     where id_agendamento  = ?;
   `;
 
-  let resposta = await con.query(comando, [id])
-  
+  let resposta = await con.query(comando, [id]);
+
   let info = resposta[0];
   let linhas = info.affectedRows;
 
   return linhas;
 }
 
-export async function consultarAgendamento(){
-    const comando = `
-    select id_agendamento     id,
-    nm_cliente        conteudo,
-    dt_agendamento    datas,
-    ds_horario    hora,
-    nm_servico        servico,
-    atendimento_domicilio atend,
-    ds_cep      endereco
+export async function consultarAgendamento() {
+  const comando = `
+    select id_agendamento,
+     dt_agendamento, 
+     bl_domicilio,
+      nm_servico, 
+      id_cliente
     from tb_agendamento;
     `;
-  let resposta = await con.query(comando)
-  
-  let registros = resposta[0]
+  let resposta = await con.query(comando);
 
-  return registros
+  let registros = resposta[0];
+
+  return registros;
 }
