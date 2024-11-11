@@ -14,7 +14,6 @@ endpoint.post("/cliente", async (req, resp) => {
             id: idGerado
         });
     } catch (error) {
-        console.error("Erro ao adicionar cliente:", error.message);
         resp.status(400).send({ message: "Erro ao adicionar cliente", error: error.message });
     }
 });
@@ -26,7 +25,6 @@ endpoint.put("/cliente/:id", async (req, resp) => {
         await alteraClienteService(id, cliente);
         resp.status(200).send();
     } catch (err) {
-        console.error("Erro ao alterar cliente:", err.message);
         resp.status(400).send({ message: "Erro ao alterar cliente", error: err.message });
     }
 });
@@ -37,7 +35,6 @@ endpoint.delete("/cliente/:id", async (req, resp) => {
         await deletarClienteService(id);
         resp.status(200).send();
     } catch (err) {
-        console.error("Erro ao deletar cliente:", err.message);
         resp.status(400).send({ message: "Erro ao deletar cliente", error: err.message });
     }
 });
@@ -47,7 +44,6 @@ endpoint.get("/cliente", async (req, resp) => {
         let registros = await consultarClienteService();
         resp.status(200).send(registros);
     } catch (err) {
-        console.error("Erro ao consultar clientes:", err.message);
         resp.status(400).send({ message: "Erro ao consultar clientes", error: err.message });
     }
 });
