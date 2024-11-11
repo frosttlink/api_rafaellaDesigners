@@ -22,6 +22,10 @@ let con = await mysql.createConnection({
 
 });
 
-console.log('API CONECTADA COM DB');
+const hora = new Date().toLocaleString();
+  console.log('\n\x1b[32m%s\x1b[0m', '🌟 Conexão com o MySQL Estabelecida!');
+  console.log('\x1b[36m%s\x1b[0m', `Banco de Dados: ${process.env.MYSQL_DB}`);
+  console.log('\x1b[33m%s\x1b[0m', `Hora da Conexão: ${hora}`);
+  console.log('--------------------------------------------\n');
 
 export default con;
