@@ -42,3 +42,7 @@ CREATE TABLE tb_servicos (
   img_servico varchar(700) ,
   ds_disponivel varchar(500)
 );
+
+alter table tb_cliente change column nr_cliente ds_telefone varchar(200);
+alter table tb_cliente change column nr_cep ds_cep varchar(200);
+alter table tb_cliente add column nr_casa varchar(200);
