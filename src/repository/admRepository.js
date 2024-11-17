@@ -59,7 +59,7 @@ export async function deletarAdm(id) {
 export async function consultarAdm() {
 
     let comando = `
-    select ds_email,
+    select nm_adm,
     ds_senha
     from tb_adm
     `;
@@ -84,3 +84,31 @@ export async function validarAdm(adm) {
     let registros = await con.query(comando, [adm.nome, hash])
     return registros[0][0]
 }
+
+export async function consultarAdmSenha() {
+
+    let comando = `
+    select 
+    ds_senha
+    from tb_adm
+    `;
+    let resposta = await con.query(comando);
+
+    let registros = resposta[0]
+    return registros
+}
+export async function consultarAdmNome(nome) {
+
+    let comando = `
+    select id_adm
+    nm_adm
+    from tb_adm
+    where nm_adm = ?
+    `;
+    let resposta = await con.query(comando,[nome]);
+
+    let registros = resposta[0]
+    return registros
+}
+
+

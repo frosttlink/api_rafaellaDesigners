@@ -4,7 +4,9 @@ import alteraAdmService from "../service/adm/admAlterarService.js";
 import deletarAdmService from "../service/adm/admDeleteService.js";
 import consultarAdmService from "../service/adm/admConsultaService.js";
 import validarAdmService from "../service/adm/admEntrarService.js";
-import { gerarToken } from "../utils/jwt.js";
+import { autenticar, gerarToken } from "../utils/jwt.js";
+import consultarSenhaService from "../service/adm/admSenhaService.js";
+import  consultarNomeService  from "../service/adm/admServiceNome.js";
 
 
 const endpoint = Router();
@@ -27,6 +29,23 @@ endpoint.post("/adm", async (req,resp) =>{
 
 })
 
+endpoint.get("/verificarToken",autenticar, async (req,resp) =>{
+    try {
+        const nome = req.user.nome;
+        await consultarNomeService(nome);
+        resp.status(204).send()
+    } catch (error) {
+        resp.status(401).send({erro:err.message});
+    }
+})
+endpoint.get("/validarToken",autenticar, async (req,resp) =>{
+    try {
+        let resgistros = await consultarSenhaService();
+        resp.status(200).send(resgistros);
+    } catch (err) {
+        resp.status(400).send("erro");
+    }
+})
 endpoint.put("/adm/:id", async (req,resp) =>{
     try {
         let adm = req.body;

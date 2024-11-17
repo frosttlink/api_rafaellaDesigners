@@ -1,4 +1,5 @@
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
+
 const KEY = '===!!RafaelaDesigners==='
 
 export function gerarToken(userInfo) {

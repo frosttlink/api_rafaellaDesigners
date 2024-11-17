@@ -58,3 +58,5 @@ export async function consultarCliente(){
     let registros = resposta[0]
     return registros
 }
+
+
