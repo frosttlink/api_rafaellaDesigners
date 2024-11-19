@@ -11,7 +11,7 @@ export async function adicionarAgendamento(agendamento) {
     agendamento.domicilio,
     agendamento.servico,
     agendamento.idCliente,
-    agendamento.realizado
+    agendamento.realizado,
   ]);
 
   let info = registro[0];
@@ -37,7 +37,7 @@ export async function alterarAgendamento(id, agendamento) {
     agendamento.servico,
     agendamento.idCliente,
     agendamento.realizado,
-    id
+    id,
   ]);
 
   let linhasAfetadas = resposta[0].affectedRows;
@@ -62,15 +62,7 @@ export async function deletarAgendamento(id) {
 
 export async function consultarAgendamento() {
   const comando = `
-<<<<<<< HEAD
-    select id_agendamento,
-      dt_agendamento, 
-      bl_domicilio,
-      nm_servico, 
-      id_cliente,
-      bt_realizado
-      from tb_agendamento;
-=======
+
     SELECT 
   agendamento.id_agendamento, 
   agendamento.dt_agendamento, 
@@ -83,7 +75,6 @@ JOIN
   tb_cliente AS cliente 
 ON 
   agendamento.id_cliente = cliente.id_cliente;
->>>>>>> bf75a4a3bd9598c0876ef1b628f4ddad1c820973
     `;
   let resposta = await con.query(comando);
 
@@ -91,4 +82,3 @@ ON
 
   return registros;
 }
-
