@@ -59,4 +59,13 @@ export async function consultarCliente(){
     return registros
 }
 
-
+export async function verificarCliente(nome, telefone) {
+    const comando = `
+        SELECT *
+        FROM tb_cliente
+        WHERE nm_cliente = ? AND ds_telefone = ?;
+    `;
+    
+    let resposta = await con.query(comando, [nome, telefone]);
+    return resposta[0]; 
+}
