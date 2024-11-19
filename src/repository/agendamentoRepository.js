@@ -2,8 +2,8 @@ import con from "./connection.js";
 
 export async function adicionarAgendamento(agendamento) {
   const comando = `
-    insert into tb_agendamento (dt_agendamento, bl_domicilio, nm_servico, id_cliente)
-    values (?, ?, ?, ?);
+    insert into tb_agendamento (dt_agendamento, bl_domicilio, nm_servico, id_cliente,bt_realizado)
+    values (?, ?, ?, ?, ?);
   `;
 
   let registro = await con.query(comando, [
@@ -11,6 +11,7 @@ export async function adicionarAgendamento(agendamento) {
     agendamento.domicilio,
     agendamento.servico,
     agendamento.idCliente,
+    agendamento.realizado
   ]);
 
   let info = registro[0];
@@ -25,7 +26,8 @@ export async function alterarAgendamento(id, agendamento) {
       set dt_agendamento = ?,
        bl_domicilio = ?, 
        nm_servico = ?, 
-       id_cliente = ?
+       id_cliente = ?,
+       bt_realizado = ?
     where id_agendamento = ?;
   `;
 
@@ -34,7 +36,8 @@ export async function alterarAgendamento(id, agendamento) {
     agendamento.domicilio,
     agendamento.servico,
     agendamento.idCliente,
-    id,
+    agendamento.realizado,
+    id
   ]);
 
   let linhasAfetadas = resposta[0].affectedRows;
@@ -60,11 +63,12 @@ export async function deletarAgendamento(id) {
 export async function consultarAgendamento() {
   const comando = `
     select id_agendamento,
-     dt_agendamento, 
-     bl_domicilio,
+      dt_agendamento, 
+      bl_domicilio,
       nm_servico, 
-      id_cliente
-    from tb_agendamento;
+      id_cliente,
+      bt_realizado
+      from tb_agendamento;
     `;
   let resposta = await con.query(comando);
 
