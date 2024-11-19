@@ -39,7 +39,7 @@ export async function alterarCliente(id,cliente){
 }
 export async function deletarCliente(id){
     let comando = `
-    delete from tb_cliente where id_cliente = ?
+        delete from tb_cliente where id_cliente = ?
     `;
         let resposta = await con.query (comando, [ 
         id
@@ -49,6 +49,17 @@ export async function deletarCliente(id){
     let linhas = info.affectedRows;
     return linhas;
 }
+
+export async function deletarAgendamentosPorCliente(idCliente) {
+    let comando = `
+        DELETE FROM tb_agendamento WHERE id_cliente = ?;
+    `;
+    let resposta = await con.query(comando, [idCliente]);
+    let info = resposta[0];
+    let linhas = info.affectedRows;
+    return linhas;
+}
+
 export async function consultarCliente(){
     let comando = `
     select id_cliente, nm_cliente, ds_telefone, ds_cep, nm_rua, nr_casa
