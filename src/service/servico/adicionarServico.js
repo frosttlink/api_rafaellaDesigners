@@ -4,3 +4,5 @@ export default async function adicionarServicoService(servicoObj) {
   let idGerado = await adicionarServico(servicoObj);
   return idGerado;
 }
+
+// viana nenes
