@@ -62,6 +62,7 @@ export async function deletarAgendamento(id) {
 
 export async function consultarAgendamento() {
   const comando = `
+<<<<<<< HEAD
     select id_agendamento,
       dt_agendamento, 
       bl_domicilio,
@@ -69,6 +70,20 @@ export async function consultarAgendamento() {
       id_cliente,
       bt_realizado
       from tb_agendamento;
+=======
+    SELECT 
+  agendamento.id_agendamento, 
+  agendamento.dt_agendamento, 
+  agendamento.nm_servico, 
+  cliente.nm_cliente,
+  agendamento.bl_domicilio
+FROM 
+  tb_agendamento AS agendamento
+JOIN 
+  tb_cliente AS cliente 
+ON 
+  agendamento.id_cliente = cliente.id_cliente;
+>>>>>>> bf75a4a3bd9598c0876ef1b628f4ddad1c820973
     `;
   let resposta = await con.query(comando);
 
@@ -76,3 +91,4 @@ export async function consultarAgendamento() {
 
   return registros;
 }
+
