@@ -61,22 +61,22 @@ endpoints.put('/alterar/pee/:id', async (req,resp) =>{
 
 endpoints.delete('/deletar/pee/:id', async (req, resp) => {
     try {
-      let id = req.params.id
-  
-      const linhasAfetadasDeletar = await deletarProdutoAndEstoqueService(id)
-  
-      if (linhasAfetadasDeletar.linhasAfetadas > 0 || linhasAfetadasDeletar.linhasAfetadas2 > 0) {
-        resp.send('Produto e estoque deletados com sucesso.');
-    } else {
-        resp.status(404).send('Nenhum produto ou estoque encontrado para o ID fornecido.');
-    }
-  
+        let id = req.params.id;
+
+        const { linhasAfetadasEstoque, linhasAfetadasProduto } = await deletarProdutoAndEstoqueService(id);
+
+        if (linhasAfetadasEstoque > 0 || linhasAfetadasProduto > 0) {
+            resp.send('Produto e estoque deletados com sucesso.');
+        } else {
+            resp.status(404).send('Nenhum produto ou estoque encontrado para o ID fornecido.');
+        }
     } catch (err) {
-      resp.status(400).send({
-        erro: err.message
-      })
+        resp.status(400).send({
+            erro: err.message
+        });
     }
-  })  
+});
+
 
 
 

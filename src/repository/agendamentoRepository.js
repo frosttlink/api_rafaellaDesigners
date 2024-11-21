@@ -2,16 +2,17 @@ import con from "./connection.js";
 
 export async function adicionarAgendamento(agendamento) {
   const comando = `
-    insert into tb_agendamento (dt_agendamento, bl_domicilio, nm_servico, id_cliente,bt_realizado)
-    values (?, ?, ?, ?, ?);
-  `;
+  INSERT INTO tb_agendamento (dt_agendamento, bl_domicilio, nm_servico, id_cliente, nm_endereco, bt_realizado)
+  VALUES (?, ?, ?, ?, ?, ?);
+`;
 
   let registro = await con.query(comando, [
     agendamento.data,
     agendamento.domicilio,
     agendamento.servico,
     agendamento.idCliente,
-    agendamento.realizado,
+    agendamento.endereco || null,
+    agendamento.realizado || false,
   ]);
 
   let info = registro[0];
@@ -22,21 +23,23 @@ export async function adicionarAgendamento(agendamento) {
 
 export async function alterarAgendamento(id, agendamento) {
   const comando = `
-    update tb_agendamento
-      set dt_agendamento = ?,
-       bl_domicilio = ?, 
-       nm_servico = ?, 
-       id_cliente = ?,
-       bt_realizado = ?
-    where id_agendamento = ?;
-  `;
+  UPDATE tb_agendamento
+  SET dt_agendamento = ?,
+      bl_domicilio = ?, 
+      nm_servico = ?, 
+      id_cliente = ?,
+      nm_endereco = ?,  -- Atualize o endereço
+      bt_realizado = ?
+  WHERE id_agendamento = ?;
+`;
 
   let resposta = await con.query(comando, [
     agendamento.data,
     agendamento.domicilio,
     agendamento.servico,
     agendamento.idCliente,
-    agendamento.realizado,
+    agendamento.endereco || null, 
+    agendamento.realizado || false,
     id,
   ]);
 
@@ -62,23 +65,24 @@ export async function deletarAgendamento(id) {
 
 export async function consultarAgendamento() {
   const comando = `
+  SELECT 
+    agendamento.id_agendamento, 
+    agendamento.dt_agendamento, 
+    agendamento.nm_servico, 
+    cliente.nm_cliente,
+    agendamento.bl_domicilio,
+    agendamento.nm_endereco
+  FROM 
+    tb_agendamento AS agendamento
+  JOIN 
+    tb_cliente AS cliente 
+  ON 
+    agendamento.id_cliente = cliente.id_cliente;
+`;
 
-    SELECT 
-  agendamento.id_agendamento, 
-  agendamento.dt_agendamento, 
-  agendamento.nm_servico, 
-  cliente.nm_cliente,
-  agendamento.bl_domicilio
-FROM 
-  tb_agendamento AS agendamento
-JOIN 
-  tb_cliente AS cliente 
-ON 
-  agendamento.id_cliente = cliente.id_cliente;
-    `;
   let resposta = await con.query(comando);
-
   let registros = resposta[0];
 
+  console.log(registros);  // Verifique se o campo nm_endereco está vindo corretamente.
   return registros;
 }

@@ -22,38 +22,55 @@ endpoints.get('/agendamento', async (req, resp) => {
 
 endpoints.post("/agendamento/", async (req, resp) => {
   try {
+    let agendamento = req.body;
 
-    let agendamento = req.body
-    let idGerado = await adicionarAgendamentoService(agendamento)
+    let novoAgendamento = {
+      data: agendamento.data,
+      domicilio: agendamento.domicilio,
+      servico: agendamento.servico,
+      idCliente: agendamento.idCliente,
+      endereco: agendamento.endereco || null,
+      realizado: agendamento.realizado || false,
+    };
+    
+
+    let idGerado = await adicionarAgendamentoService(novoAgendamento);
 
     resp.send({
-      novoId: idGerado
-    })
-
+      novoId: idGerado,
+    });
   } catch (err) {
-
     resp.status(400).send({
-      erro: err.message
-    })
-
+      erro: err.message,
+    });
   }
-})
+});
+
 
 endpoints.put("/agendamento/:id", async (req, resp) => {
   try {
-    let id = req.params.id
-    let agendamento = req.body
+    let id = req.params.id;
 
-    await alterarAgendamentoService(id, agendamento)
+    let agendamento = req.body;
 
-    resp.status(204).send()
+    let agendamentoAtualizado = {
+      data: agendamento.data,
+      domicilio: agendamento.domicilio,
+      servico: agendamento.servico,
+      idCliente: agendamento.idCliente,
+      endereco: agendamento.endereco, 
+      realizado: agendamento.realizado || false,
+    };
+    await alterarAgendamentoService(id, agendamentoAtualizado);
 
+    resp.status(204).send();
   } catch (err) {
     resp.status(400).send({
-      erro: err.message
-    })
+      erro: err.message,
+    });
   }
-})
+});
+
 
 endpoints.delete('/agendamento/:id', async (req, resp) => {
   try {
