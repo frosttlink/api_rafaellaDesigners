@@ -4,6 +4,7 @@ import adicionarAgendamentoService from "../service/agendamentos/adiconarAgendam
 import alterarAgendamentoService from "../service/agendamentos/alterarAgendamento.js";
 import deletarAgendamentoService from "../service/agendamentos/deletarAgendamento.js";
 import consultarAgendamentoService from "../service/agendamentos/consultarAgendamento.js";
+import { descontarProdutosPorServico } from "../repository/agendamentoRepository.js";
 
 const endpoints = Router()
 
@@ -42,6 +43,18 @@ endpoints.post("/agendamento/", async (req, resp) => {
   } catch (err) {
     resp.status(400).send({
       erro: err.message,
+    });
+  }
+});
+
+endpoints.post('/agendamento/desconto/:servico', async (req, resp) => {
+  try {
+    let { servico } = req.params;
+    await descontarProdutosPorServico(servico);
+    resp.status(200).send({ message: 'Produtos descontados com sucesso!' });
+  } catch (err) {
+    resp.status(400).send({
+      erro: err.message
     });
   }
 });

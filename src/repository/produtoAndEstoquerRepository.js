@@ -1,5 +1,33 @@
 import con from "./connection.js";
 
+const produtosPorServico = {
+  "Cílios - Volume Brasileiro": [
+    { id_produto: 1, qtd_utilizada: 5 }, // Exemplo: Cola para cílios
+    { id_produto: 2, qtd_utilizada: 3 }, // Exemplo: Fios de cílios
+  ],
+  "Cílios - Volume Fio a Fio": [
+    { id_produto: 1, qtd_utilizada: 3 }, // Exemplo: Cola para cílios
+    { id_produto: 3, qtd_utilizada: 2 }, // Exemplo: Fios individuais
+  ],
+  "Cílios - Volume Fox": [
+    { id_produto: 1, qtd_utilizada: 4 }, // Exemplo: Cola para cílios
+    { id_produto: 4, qtd_utilizada: 3 }, // Exemplo: Fios estilo Fox
+  ],
+  "Sobrancelha - Limpeza": [
+    { id_produto: 5, qtd_utilizada: 1 }, // Exemplo: Pinça
+    { id_produto: 6, qtd_utilizada: 2 }, // Exemplo: Algodão
+  ],
+  "Sobrancelha - Design com Henna": [
+    { id_produto: 5, qtd_utilizada: 1 }, // Exemplo: Pinça
+    { id_produto: 7, qtd_utilizada: 1 }, // Exemplo: Henna
+  ],
+  "Epilação": [
+    { id_produto: 8, qtd_utilizada: 3 }, // Exemplo: Cera de epilação
+    { id_produto: 9, qtd_utilizada: 2 }, // Exemplo: Espátulas
+  ],
+};
+
+
 export async function adicionarProdutoAndEstoque(produto) {
   const comando = `
         insert into tb_produto(nm_produto, tp_produto, vl_produto, img_produto)
@@ -65,39 +93,77 @@ export async function alterarProdutoAndEstoque(produto, id) {
 }
 
 export async function removerProdutoAndEstoque(id) {
-  const comando = `
-            delete from tb_estoque
-            where id_estoque = ?;
-            `;
-  const comando2 = `
-            delete from tb_produto
-            where id_produto = ?;
-            `;
+  const comandoEstoque = `
+    DELETE FROM tb_estoque
+    WHERE id_produto = ?;
+  `;
+  const comandoProduto = `
+    DELETE FROM tb_produto
+    WHERE id_produto = ?;
+  `;
 
-  let resposta = await con.query(comando, [id]);
-  let resposta2 = await con.query(comando2, [id]);
+  // Excluindo os registros de estoque primeiro
+  await con.query(comandoEstoque, [id]);
 
-  let linhasAfetadas = resposta[0][0].affectedRows;
-  let linhasAfetadas2 = resposta2[0][0].affectedRows;
+  // Agora, excluindo o produto
+  let respostaProduto = await con.query(comandoProduto, [id]);
 
-  return { linhasAfetadas, linhasAfetadas2 };
+  let linhasAfetadas = respostaProduto[0].affectedRows; // Acessando o número de linhas afetadas na exclusão do produto
+
+  return { linhasAfetadas };
 }
+
 
 export async function consultarEP() {
   let comando = `
-        SELECT 
-            e.qtd_produto,
-            p.nm_produto,
-            p.tp_produto,
-            p.vl_produto,
-            p.img_produto
-        FROM 
-            tb_estoque e
-        INNER JOIN 
-            tb_produto p ON e.id_produto = p.id_produto;
-        `;
+    SELECT 
+        e.qtd_produto,
+        p.nm_produto,
+        p.tp_produto,
+        p.vl_produto,
+        p.img_produto,
+        p.id_produto  -- Incluindo explicitamente o id_produto de tb_produto
+    FROM 
+        tb_estoque e
+    INNER JOIN 
+        tb_produto p ON e.id_produto = p.id_produto;
+  `;
   let resposta = await con.query(comando);
   let registros = resposta[0];
 
   return registros;
+}
+
+export async function listarCategorias() {
+  const comando = `
+      SELECT DISTINCT nm_servico AS categoria
+      FROM tb_agendamento;
+  `;
+
+  const [registros] = await con.query(comando);
+  return registros;
+}
+
+export async function removerProdutosPorCategoria(servico) {
+  const produtos = produtosPorServico[servico];
+
+  if (!produtos) {
+    throw new Error(`Serviço '${servico}' não encontrado.`);
+  }
+
+  for (const { id_produto } of produtos) {
+    const comandoDelete = `
+      DELETE FROM tb_produto
+      WHERE id_produto = ?;
+    `;
+    await con.query(comandoDelete, [id_produto]);
+
+    const comandoDeleteEstoque = `
+      DELETE FROM tb_estoque
+      WHERE id_produto = ?;
+    `;
+    await con.query(comandoDeleteEstoque, [id_produto]);
+  }
+
+  return { mensagem: `Produtos da categoria '${servico}' removidos com sucesso!` };
 }

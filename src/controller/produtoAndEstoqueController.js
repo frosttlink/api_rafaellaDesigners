@@ -4,11 +4,14 @@ import { alterarProdutoAndEstoqueService } from "../service/produtoAndEstoque/al
 import { deletarProdutoAndEstoqueService } from "../service/produtoAndEstoque/deletarProdutoAndEstoque.js";
 import { consultarEPService } from "../service/produtoAndEstoque/consultarProdutoEstoque.js";
 import { autenticar } from "../utils/jwt.js";
+import {  listarCategorias, removerProdutosPorCategoria } from "../repository/produtoAndEstoquerRepository.js";
+import { descontarProdutosPorServico } from "../repository/agendamentoRepository.js";
 
 
 const endpoints = Router();
 
-endpoints.get('/procurar/inner/',autenticar, async (req,resp) =>{
+
+endpoints.get('/procurar/inner/', async (req,resp) =>{
     try {
         let registros = await consultarEPService();
         
@@ -18,6 +21,15 @@ endpoints.get('/procurar/inner/',autenticar, async (req,resp) =>{
         resp.status(400).send({
             err : err.message
         })
+    }
+})
+
+endpoints.get("/categoria", async (req, resp) => {
+    try {
+        const categorias = await listarCategorias(); 
+        resp.send(categorias);
+    } catch (err) {
+        resp.status(400).send({ erro: err.message });
     }
 })
 
@@ -57,8 +69,6 @@ endpoints.put('/alterar/pee/:id', async (req,resp) =>{
     }
 })
 
-
-
 endpoints.delete('/deletar/pee/:id', async (req, resp) => {
     try {
         let id = req.params.id;
@@ -66,7 +76,7 @@ endpoints.delete('/deletar/pee/:id', async (req, resp) => {
         const { linhasAfetadasEstoque, linhasAfetadasProduto } = await deletarProdutoAndEstoqueService(id);
 
         if (linhasAfetadasEstoque > 0 || linhasAfetadasProduto > 0) {
-            resp.send('Produto e estoque deletados com sucesso.');
+            resp.status(200).send('Produto e estoque deletados com sucesso.');
         } else {
             resp.status(404).send('Nenhum produto ou estoque encontrado para o ID fornecido.');
         }
@@ -77,9 +87,26 @@ endpoints.delete('/deletar/pee/:id', async (req, resp) => {
     }
 });
 
-
-
+endpoints.put("/estoque/atualizar", async (req, resp) => {
+    try {
+      let id = req.params.id      
+      let servico = req.body;
+      const linhasAfetadas = await descontarProdutosPorServico(servico,id);
+      resp.send(linhasAfetadas);
+    } catch (err) {
+      resp.status(400).send({ erro: err.message });
+    }
+  });
 
 export default endpoints
   
-
+endpoints.delete("/estoque/remover-por-categoria", async (req, resp) => {
+    try {
+      const { servico } = req.body; 
+      const resultado = await removerProdutosPorCategoria(servico);
+      resp.send(resultado);
+    } catch (err) {
+      resp.status(400).send({ erro: err.message });
+    }
+  });
+  

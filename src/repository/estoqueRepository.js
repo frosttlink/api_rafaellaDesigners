@@ -15,7 +15,7 @@ export async function adcionarEstoque(estoque){
 
 export async function consultarEstoque(){
     let comando = `
-    select id_produto_estoque	id,
+    select id_produto	id,
             qtd_produto         qtd,
             id_produto          id
     from tb_estoque;
@@ -28,11 +28,11 @@ export async function consultarEstoque(){
 
 export async function consultarIDEstoque(id){
     let comando = `
-    select id_produto_estoque	id,
+    select id_produto	id,
     qtd_produto         qtd,
     id_produto          pd
     from tb_estoque
-    where id_produto_estoque = ?
+    where id_produto = ?
     `
     let resposta = await con.query(comando,[id]);
     let registros = resposta[0];
@@ -40,25 +40,24 @@ export async function consultarIDEstoque(id){
     return registros;
 }
 
-export async function alterarEstoque(estoque,id){
+export async function alterarEstoque(estoque, id) {
     const comando = `
-    update tb_estoque 
-    set qtd_produto = ?,
-        id_produto = ?
-    where id_produto_estoque = ?
-`;
-
+      update tb_estoque 
+      set qtd_produto = ?,
+          id_produto = ?
+      where id_produto = ?
+    `;
     let resposta = await con.query(comando,[estoque.quantidade, estoque.produto, id]);
-
+  
     let info = resposta[0];
-
+  
     return info.affectedRows;
-}
+  }
 
 export async function removerEstoque(id){
     const comando = `
     delete from tb_estoque
-    where id_produto_estoque = ?;
+    where id_produto = ?;
     `
 
     let resposta = await con.query(comando,[id]);

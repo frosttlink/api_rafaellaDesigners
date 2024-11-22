@@ -2,7 +2,7 @@ import con from "./connection.js";
 
 export async function adicionarProduto(produto) {
     const comando = `
-        insert into tb_produto(nm,produto,tp_produto,qtd_produto,id_produto, img_produto)
+        insert into tb_produto(nm,produto,tp_produto,qtd_produto, img_produto)
         values
         (?,?,?,?,?,?)
         ;
