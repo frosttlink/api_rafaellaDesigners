@@ -1,33 +1,5 @@
 import con from "./connection.js";
 
-const produtosPorServico = {
-  "Cílios - Volume Brasileiro": [
-    { id_produto: 1, qtd_utilizada: 5 }, // Exemplo: Cola para cílios
-    { id_produto: 2, qtd_utilizada: 3 }, // Exemplo: Fios de cílios
-  ],
-  "Cílios - Volume Fio a Fio": [
-    { id_produto: 1, qtd_utilizada: 3 }, // Exemplo: Cola para cílios
-    { id_produto: 3, qtd_utilizada: 2 }, // Exemplo: Fios individuais
-  ],
-  "Cílios - Volume Fox": [
-    { id_produto: 1, qtd_utilizada: 4 }, // Exemplo: Cola para cílios
-    { id_produto: 4, qtd_utilizada: 3 }, // Exemplo: Fios estilo Fox
-  ],
-  "Sobrancelha - Limpeza": [
-    { id_produto: 5, qtd_utilizada: 1 }, // Exemplo: Pinça
-    { id_produto: 6, qtd_utilizada: 2 }, // Exemplo: Algodão
-  ],
-  "Sobrancelha - Design com Henna": [
-    { id_produto: 5, qtd_utilizada: 1 }, // Exemplo: Pinça
-    { id_produto: 7, qtd_utilizada: 1 }, // Exemplo: Henna
-  ],
-  "Epilação": [
-    { id_produto: 8, qtd_utilizada: 3 }, // Exemplo: Cera de epilação
-    { id_produto: 9, qtd_utilizada: 2 }, // Exemplo: Espátulas
-  ],
-};
-
-
 export async function adicionarProdutoAndEstoque(produto) {
   const comando = `
         insert into tb_produto(nm_produto, tp_produto, vl_produto, img_produto)
